@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Laravel 10.48.0 - CRUD User Example</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"> 
 </head>
 <body>
 <nav class="navbar navbar-light navbar-expand-lg mb-5" style="background-color: #e3f2fd;">
@@ -21,6 +21,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('user.createUser') }}">Register</a>
                     </li>
+                    
                 @else
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('signout') }}">Logout</a>
@@ -31,5 +32,8 @@
     </div>
 </nav>
 @yield('content')
+<footer>
+        <h5 class="text">Lập trình web be2 @son</h5>
+</footer>
 </body>
 </html>

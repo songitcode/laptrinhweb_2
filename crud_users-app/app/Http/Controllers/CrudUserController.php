@@ -69,14 +69,16 @@ class CrudUserController extends Controller
     }
 
     /** View user detail */
-    public function readUser(Request $request) {
+    public function readUser(Request $request)
+    {
         $user_id = $request->get('id');
         $user = User::find($user_id);
 
         return view('auth.read', ['user' => $user]);
     }
 
-    public function deleteUser(Request $request) {
+    public function deleteUser(Request $request)
+    {
         $user_id = $request->get('id');
         $user = User::destroy($user_id);
 
@@ -86,18 +88,46 @@ class CrudUserController extends Controller
     /** List of users */
     public function listUser()
     {
-        if(Auth::check()){
+        if (Auth::check()) {
             $users = User::all();
             return view('auth.list', ['users' => $users]);
         }
 
         return redirect("login")->withSuccess('You are not allowed to access');
     }
+    /** Update user detail */
+    public function updateUser() {
+        return view('auth.update');
+    }
+    public function postUpdateUser(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:6',
+        ]);
 
-    public function signOut() {
+        $user_id = $request->get('id');
+        $user = User::find($user_id);
+
+        $user->name = $request->get('name');
+        $user->email = $request->get('email');
+        $user->password = Hash::make($request->get('password'));
+
+        $user->save();
+
+        return redirect("list")->withSuccess('User details have been updated');
+    }
+
+    public function signOut()
+    {
         Session::flush();
         Auth::logout();
 
         return Redirect('login');
+    }
+
+    public function xinChaoNe() {
+        return view ('auth.xinChao');   
     }
 }
