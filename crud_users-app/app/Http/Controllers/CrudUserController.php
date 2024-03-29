@@ -31,6 +31,7 @@ class CrudUserController extends Controller
         ]);
 
         $credentials = $request->only('email', 'password');
+
         if (Auth::attempt($credentials)) {
             return redirect()->intended('list')
                 ->withSuccess('Signed in');
@@ -96,26 +97,36 @@ class CrudUserController extends Controller
         return redirect("login")->withSuccess('You are not allowed to access');
     }
     /** Update user detail */
-    public function updateUser() {
-        return view('auth.update');
+    public function updateUser(Request $request)
+    {
+        // Lay id bang phuong thuc get
+        $user_id = $request->get('id');
+        // lenh tim id trong csdl ngan gon
+        $user = User::find($user_id);
+        // sau khi tim thay id theo phuong thuc tra ve
+        // view va tao gia tri user
+        return view('auth.update', ['user' => $user]);
     }
     public function postUpdateUser(Request $request)
     {
+        // Kiem tra du lieu
         $request->validate([
             'name' => 'required',
             'email' => 'required|email',
             'password' => 'required|min:6',
         ]);
-
+        // lay id tu co so du lieu
         $user_id = $request->get('id');
+        // a` anh oi toi tim thay thang id cua anh roi
         $user = User::find($user_id);
-
+    
+        // sau do toi tien hanh lay may cai moi cua anh de toi ... ->
         $user->name = $request->get('name');
         $user->email = $request->get('email');
         $user->password = Hash::make($request->get('password'));
-
+        // ... save no lai
         $user->save();
-
+        // roi toi tra no ve trang list
         return redirect("list")->withSuccess('User details have been updated');
     }
 
@@ -127,7 +138,4 @@ class CrudUserController extends Controller
         return Redirect('login');
     }
 
-    public function xinChaoNe() {
-        return view ('auth.xinChao');   
-    }
 }
